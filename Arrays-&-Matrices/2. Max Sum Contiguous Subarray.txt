@@ -57,6 +57,7 @@ Explanation 2:
         3.  take a temp variable sum add every element of arry to It.
         4.  add new value of sum to maxsum if sum is greated than maxsum.
         5.  Check if sum is less than zero if yest then update sum to zero again.
+        6.  TC = O(N) || SC = O(1)
         */
         int maxsum = Integer.MIN_VALUE, sum = 0;
         for(int i = 0; i < A.size(); i++){
