@@ -1,0 +1,71 @@
+Problem Description
+Given an array of integers A, every element appears twice except for one. Find that integer that occurs once.
+
+NOTE: Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+
+
+Problem Constraints
+2 <= |A| <= 2000000
+
+0 <= A[i] <= INTMAX
+
+
+
+Input Format
+The first and only argument of input contains an integer array A.
+
+
+
+Output Format
+Return a single integer denoting the single element.
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 2, 2, 3, 1]
+Input 2:
+
+ A = [1, 2, 2]
+
+
+Example Output
+Output 1:
+
+ 3
+Output 2:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+3 occurs once.
+Explanation 2:
+
+1 occurs once.
+
+//Java
+
+public class Solution {
+    // DO NOT MODIFY THE ARGUMENTS WITH "final" PREFIX. IT IS READ ONLY
+    public int singleNumber(final int[] A) {
+        /*
+        To solve this in linear time and without extra space you should know the 
+        bitwise "^" XOR operator.
+        Properties :- 1^0 = 1, 0^1 = 1 and 1^1 = 0, 0^0 = 0
+        It means if we take xor of two elements if they are same then output will be zero
+        Lets use this xor operator to solve this problem.
+        Take XOR of all elements in the array it will cancel-out all duplicate
+        elements and we will get our answer.
+        */
+        int xor = 0;
+        for(int i = 0; i < A.length; i++){
+            xor = xor ^ A[i];
+        }
+        return xor;
+    }
+}
