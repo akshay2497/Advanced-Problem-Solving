@@ -1,0 +1,108 @@
+Problem Description
+Given an array of integers, every element appears thrice except for one, which occurs once.
+
+Find that element that does not appear thrice.
+
+NOTE: Your algorithm should have a linear runtime complexity.
+
+Could you implement it without using extra memory?
+
+
+
+
+Problem Constraints
+2 <= A <= 5*106
+
+0 <= A <= INTMAX
+
+
+
+Input Format
+First and only argument of input contains an integer array A.
+
+
+
+Output Format
+Return a single integer.
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 2, 4, 3, 3, 2, 2, 3, 1, 1]
+Input 2:
+
+ A = [0, 0, 0, 1]
+
+
+Example Output
+Output 1:
+
+ 4
+Output 2:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+ 4 occurs exactly once in Input 1.
+ 1 occurs exactly once in Input 2.
+ 
+ //Java
+ 
+ public class Solution {
+    // DO NOT MODIFY THE ARGUMENTS WITH "final" PREFIX. IT IS READ ONLY
+    public int singleNumber(final int[] A) {
+        /*
+        This is most loved question of the interviewer's community.
+        Approach : 
+        ex = A = {5,7,5,4,7,11,11,9,11,7,5,4,4} ans = 9
+        Hint: Can we find if a single no has a set or unset bit at i'th position?
+        1. Let's note down all array no's and their binaray representation.
+        2. Then for each bit position count no of set bits.
+indexes     3210   
+        5-  0101
+        7-  0111
+        5-  0101
+        4-  0100
+        7-  0111
+        11- 1011
+        11- 1011
+        9-  1001
+        11- 1011
+        7-  0111
+        5-  0101
+        4-  0100
+        4-  0100
+        --------
+        3|2|1|0  --indexes
+        4|9|6|10 --No of set bits on each pos. If we carefully the pos where answars 
+ans=9=>1|0|0|1    i'th bit is set the total bits in that pos are not in multiple of 3.
+                  we can use this observation to find the answer.  
+        Steps:
+        1.  Iterate over all bit positions check if i'th bit is set if yes increase count.
+        2.  if count % 3 != 0 then set that bit in answer variable
+        3.  Finally return the anwer.
+        4. TC = O(Log(Int_maxval)*N) || SC = O(1)      
+        */
+        int ans = 0;
+        for(int i = 0; i < 32; i++){
+            int count = 0;
+            for(int j = 0; j < A.length; j++){
+                if(checkBit(A[j], i))
+                    count++;
+            }
+            if(count % 3 != 0){
+                ans = (ans | (1 << i));
+            }
+        }
+        return ans;
+    }
+
+    public boolean checkBit(int val, int pos){
+        return (val & (1 << pos)) > 0 ? true : false;
+    }
+}
