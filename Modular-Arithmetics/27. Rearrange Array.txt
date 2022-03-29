@@ -1,0 +1,45 @@
+Rearrange a given array so that Arr[i] becomes Arr[Arr[i]] with O(1) extra space.
+
+Example:
+
+Input : [1, 0]
+Return : [0, 1]
+Lets say N = size of the array. Then, following holds true :
+
+All elements in the array are in the range [0, N-1]
+N * N does not overflow for a signed integer
+
+//Java
+
+public class Solution {
+	public void arrange(ArrayList<Integer> a) {
+        /*
+            TC = O(N) || SC = O(1)
+        */
+        int n = a.size();
+        //nums = {0,2,1,5,3,4}
+        //Multiply each ele of array with array len
+        //nums = {0,12,6,30,18,24}
+        for(int i = 0; i < n; i++){
+            a.set(i, (a.get(i) * n));
+        }
+
+        //Now add Target number to the product
+        //original nums = {0,2,1,5,3,4}
+        //After multiplying by N=6 nums = {0,12,6,30,18,24}
+        //adding target no -> nums = {0+0,12+1,6+2,30+4,18+5,24+3}
+        //nums = {0,13,8,34,23,27}
+        for(int i = 0; i < n; i++){
+            int oldval = a.get(i)/n;
+            int newval = a.get(oldval)/n;
+            a.set(i, a.get(i)+newval);
+        }
+
+        //Take mod by array length for each alement
+        //nums = {0%6,13%6,8%6,34%6,23%6,27%6}
+        //nums = {0,1,2,4,5,3}
+        for(int i = 0; i < n; i++){
+            a.set(i, a.get(i)%n);
+        }
+	}
+}
