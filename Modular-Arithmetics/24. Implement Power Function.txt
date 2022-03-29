@@ -1,0 +1,57 @@
+Problem Description
+Implement pow(A, B) % C.
+In other words, given A, B and C, Find (AB % C).
+
+Note: The remainders on division cannot be negative. In other words, make sure the answer you return is non-negative.
+
+
+
+Problem Constraints
+-109 <= A <= 109
+0 <= B <= 109
+1 <= C <= 109
+
+
+Input Format
+Given three integers A, B, C.
+
+
+Output Format
+Return an integer.
+
+
+Example Input
+A = 2, B = 3, C = 3
+
+
+Example Output
+2
+
+
+Example Explanation
+23 % 3 = 8 % 3 = 2
+
+
+//Java
+
+public class Solution {
+    public int pow(int A, int B, int C) {
+        //If A and B is 0 then return 0
+        if(A == 0 && B == 0)
+            return 0;
+        //Base condition if power is 0 return 1.
+        if(B == 0)
+            return 1;
+        //Take half power of B to improve time complexity to logN.
+        long hp = pow(A, B/2, C);
+        //Multiply half power by itselef and calculate power of B in order 1 time.
+        long fp = (hp%C * hp%C)%C;
+        //If current Value of power is even then return the same power value.
+        if(B % 2 == 0)
+            return (int)((fp + C)%C);
+        //else return power multiplied by element itself
+        else
+            return (int)((fp%C * A%C)+C)%C;
+        //TC = O(LogB) || SC = O(1) if we dont consider memory stack
+    }
+}
