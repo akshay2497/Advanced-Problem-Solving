@@ -14,6 +14,8 @@ N * N does not overflow for a signed integer
 public class Solution {
 	public void arrange(ArrayList<Integer> a) {
         /*
+	Idea :- If anyhow you are able to stor both old and new value at same index of 
+		array then this problem is solved for you.
             TC = O(N) || SC = O(1)
         */
         int n = a.size();
