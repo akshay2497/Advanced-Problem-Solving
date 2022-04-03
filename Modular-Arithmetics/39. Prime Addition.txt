@@ -1,0 +1,47 @@
+You are given an even number N and you need to represent the given number as the sum of primes. The prime numbers 
+do not necessarily have to be distinct. It is guaranteed that at least one possible solution exists.
+
+You need to determine the minimum number of prime numbers needed to represent the given number.
+
+Input
+
+The first argument contains an integer N,the number you need to represent (3<=N<=10^9).
+Output
+
+Return an integer which is the minimum number of prime numbers needed to represent the given number N.
+Examples
+
+Input
+
+26
+Output
+
+2
+Explanation
+
+Testcase 1-
+
+You can represent 26 as: 13+13
+So we require minimum of 2 prime numbers to represent the number 26.
+
+//Java
+
+public class Solution {
+    /*
+    If any number can be represented as addition of two prime numbers, except when 
+    it is a prime number itself. The minimum answer will always be 2 or 1.
+
+    TC = O(sqrt(A)) || SC = O(1)
+    */
+    public int solve(int A) {
+        return isPrime(A)? 1: 2;
+    }
+    public boolean isPrime(int A){
+        for (int i = 2; i*i <= A; i++) {
+            if(A % i == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+}
