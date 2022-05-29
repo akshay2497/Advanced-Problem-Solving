@@ -1,0 +1,106 @@
+Problem Description
+You are given three positive integers, A, B, and C.
+
+Any positive integer is magical if divisible by either B or C.
+
+Return the Ath smallest magical number. Since the answer may be very large, return modulo 109 + 7.
+
+
+
+Problem Constraints
+1 <= A <= 109
+
+2 <= B, C <= 40000
+
+
+
+Input Format
+The first argument given is an integer A.
+
+The second argument given is an integer B.
+
+The third argument given is an integer C.
+
+
+
+Output Format
+Return the Ath smallest magical number. Since the answer may be very large, return modulo 109 + 7.
+
+
+
+Example Input
+Input 1:
+
+ A = 1
+ B = 2
+ C = 3
+Input 2:
+
+ A = 4
+ B = 2
+ C = 3
+
+
+Example Output
+Output 1:
+
+ 2
+Output 2:
+
+ 6
+
+
+Example Explanation
+Explanation 1:
+
+ 1st magical number is 2.
+Explanation 2:
+
+ First four magical numbers are 2, 3, 4, 6 so the 4th magical number is 6.
+
+
+
+//Java
+
+
+public class Solution {
+    public int solve(int A, int B, int C) {
+        //1.Find low and high range
+        //2.Apply Binary search.Find how many no's will be divisible by a&b till mid.
+        //3.Based on this change the low or high values.
+        //Formula in this problem to find total no's will be divisible by a& b till 
+        //mid: A | B=(x/a)+(x/b)-(x/(lcm(a,b)))
+        //Formula to find LCM :a/gcd(a,b)*b;
+        long ans = 0;
+        long low = Math.min(B, C);
+        long high = (long)1e15;
+        long lcm = lcm(B, C);
+
+        while(low <= high){
+            long mid = (low + high) / 2;
+            long multipleOfB = mid / B;
+            long multipleOfC = mid / C;
+            long multipleOfBOrC = mid / lcm;
+            long totalMultiples = (multipleOfB + multipleOfC) - multipleOfBOrC;
+            if(totalMultiples >= A){
+                ans = mid;
+                high = mid-1;
+            }else{
+                low = mid+1;
+            }
+        }
+        return (int)(ans%1000000007);
+    }
+
+    public int gcd(int a, int b)
+    {
+        if (a == 0)
+            return b;
+        return gcd(b % a, a);
+    }
+    // method to return LCM of two numbers
+    public int lcm(int a, int b)
+    {
+        return (a / gcd(a, b)) * b;
+    }
+}

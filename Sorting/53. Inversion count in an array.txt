@@ -1,0 +1,102 @@
+Problem Description
+Given an array of integers A. If i < j and A[i] > A[j], then the pair (i, j) is called an inversion of A. Find the total number of inversions of A modulo (109 + 7).
+
+
+
+Problem Constraints
+1 <= length of the array <= 100000
+
+1 <= A[i] <= 10^9
+
+
+
+Input Format
+The only argument given is the integer array A.
+
+
+
+Output Format
+Return the number of inversions of A modulo (109 + 7).
+
+
+
+Example Input
+Input 1:
+
+A = [3, 2, 1]
+Input 2:
+
+A = [1, 2, 3]
+
+
+Example Output
+Output 1:
+
+3
+Output 2:
+
+0
+
+
+Example Explanation
+Explanation 1:
+
+ All pairs are inversions.
+Explanation 2:
+
+ No inversions.
+
+//Java
+
+public class Solution {
+    public int solve(int[] A) {
+        int mod = 1000000007;
+        return mergeSort(A, 0, A.length - 1)%mod;
+    }
+    public int mergeSort(int[] A, int left, int right) {
+        int mod = 1000000007;
+        if (left >= right)
+            return 0;
+        int mid = (right + left) / 2;
+        int ans = 0;
+        ans += mergeSort(A, left, mid)%mod;
+        ans += mergeSort(A, mid + 1, right)%mod;
+        ans += merge(A, left, right, mid)%mod;
+        return ans%mod;
+    }
+    public int merge(int[] A, int left, int right, int mid) {
+        int s = right - left + 1;
+        int[] temp = new int[s];
+        int i = left;
+        int j = mid + 1;
+        int k = 0;
+        int count = 0;
+        while (i <= mid && j <= right) {
+            if (A[i] > A[j]) {
+                count += (mid - i + 1);
+                temp[k] = A[j];
+                k++;
+                j++;
+            } else {
+                temp[k] = A[i];
+                k++;
+                i++;
+            }
+        }
+        while (i <= mid) {
+            temp[k] = A[i];
+            k++;
+            i++;
+        }
+        while (j <= right) {
+            temp[k] = A[j];
+            k++;
+            j++;
+        }
+        for (int x = 0; x < temp.length; x++) {
+            A[left + x] = temp[x];
+        }
+        return count;
+    }
+
+}
