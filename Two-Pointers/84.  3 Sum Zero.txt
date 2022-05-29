@@ -1,0 +1,88 @@
+Problem Description
+
+Given an array A of N integers, are there elements a, b, c in S such that a + b + c = 0
+
+Find all unique triplets in the array which gives the sum of zero.
+
+Note:
+
+Elements in a triplet (a,b,c) must be in non-descending order. (ie, a ≤ b ≤ c) The solution set must not contain duplicate triplets.
+
+
+
+Problem Constraints
+
+0 <= N <= 7000
+
+-108 <= A[i] <= 108
+
+
+
+Input Format
+
+Single argument representing a 1-D array A.
+
+
+
+Output Format
+
+Output a 2-D vector where each row represent a unique triplet.
+
+
+
+Example Input
+
+A = [-1,0,1,2,-1,4]
+
+
+Example Output
+
+[ [-1,0,1],
+  [-1,-1,2] ]
+
+
+Example Explanation
+
+Out of all the possible triplets having total sum zero,only the above two triplets are unique.
+
+
+//Java
+
+
+public class Solution {
+    public ArrayList<ArrayList<Integer>> threeSum(ArrayList<Integer> A) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<ArrayList<Integer>>();
+        Collections.sort(A);
+        int n = A.size();
+        for(int i = 0; i < n-2; i++){
+            int j = i+1;
+            int k = n-1;
+
+            int a = A.get(i);
+            while(j < k){
+                int b = A.get(j);
+                int c = A.get(k);
+                int pairsum = b + c;
+                if(pairsum == -a){
+                    ArrayList<Integer> list = new ArrayList<>();
+                    list.add(a);
+                    list.add(b);
+                    list.add(c);
+                    lists.add(list);
+                    j++;
+                    k--;
+                }else if(pairsum > -a)
+                    k--;
+                else
+                    j++;
+            }
+        }
+
+        //Removing duplicates
+        HashSet<ArrayList<Integer>> set = new LinkedHashSet<>();
+        set.addAll(lists);
+        lists.clear();
+        lists.addAll(set);
+        return lists;
+    }
+}
