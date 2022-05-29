@@ -1,0 +1,104 @@
+Problem Description
+You are given two strings, A and B, of size N and M, respectively.
+
+You have to find the count of all permutations of A present in B as a substring. You can assume a string will have only lowercase letters.
+
+
+
+Problem Constraints
+1 <= N < M <= 105
+
+
+
+Input Format
+Given two arguments, A and B of type String.
+
+
+
+Output Format
+Return a single integer, i.e., number of permutations of A present in B as a substring.
+
+
+
+Example Input
+Input 1:
+
+ A = "abc"
+ B = "abcbacabc"
+Input 2:
+
+ A = "aca"
+ B = "acaa"
+
+
+Example Output
+Output 1:
+
+ 5
+Output 2:
+
+ 2
+
+
+Example Explanation
+Explanation 1:
+
+ Permutations of A that are present in B as substring are:
+    1. abc
+    2. cba
+    3. bac
+    4. cab
+    5. abc
+    So ans is 5.
+Explanation 2:
+
+ Permutations of A that are present in B as substring are:
+    1. aca
+    2. caa 
+
+
+//Java'
+
+
+public class Solution {
+    public int solve(String A, String B) {
+        int n = A.length(), m = B.length();
+        HashMap<Character, Integer> hmA = new HashMap<>();
+        for(int i = 0; i < n; i++){
+            hmA.put(A.charAt(i), hmA.getOrDefault(A.charAt(i), 0)+1);
+        }
+        HashMap<Character, Integer> hmB = new HashMap<>();
+        for(int i = 0; i < n; i++){
+            hmB.put(B.charAt(i), hmB.getOrDefault(B.charAt(i), 0)+1);
+        }
+
+        int ans = 0;
+        if(containspermutations(hmA, hmB))
+            ans++;
+
+        for(int i = n; i < m; i++){
+            char remove = B.charAt(i-n);
+            char add = B.charAt(i);
+            hmB.put(remove, hmB.get(remove)-1);
+            if(hmB.get(remove) == 0)
+                hmB.remove(remove);
+            hmB.put(add, hmB.getOrDefault(add, 0)+1);
+            if(containspermutations(hmA, hmB))
+                ans++;
+        }
+        return ans;
+    }
+
+    public boolean containspermutations(HashMap<Character, Integer> hmA, HashMap<Character, Integer> hmB){
+        for(char key : hmA.keySet()){
+            int val = hmA.get(key);
+            if(hmB.containsKey(key)){
+                if(val == hmB.get(key)) continue;
+                else return false;
+            }else{
+                return false;
+            } 
+        }
+        return true;
+    }
+}
