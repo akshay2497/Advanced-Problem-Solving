@@ -1,0 +1,50 @@
+Problem Description
+
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+Try solving it using constant additional space.
+
+Example:
+
+Input: 
+
+                  ______
+                 |     |
+                 \/    |
+        1 -> 2 -> 3 -> 4
+
+Return the node corresponding to node 3. 
+
+
+//Java
+
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     ListNode(int x) { val = x; next = null; }
+ * }
+ */
+public class Solution {
+	public ListNode detectCycle(ListNode head) {
+        if(head == null)
+            return head;
+        
+        ListNode h1 = head, fast = head, slow = head;
+
+        while(fast.next != null && fast.next.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(slow == fast){
+                while(h1 != slow){
+                    h1 = h1.next;
+                    slow = slow.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+	}
+}
