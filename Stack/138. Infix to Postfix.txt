@@ -1,0 +1,104 @@
+Problem Description
+Given string A denoting an infix expression. Convert the infix expression into a postfix expression.
+
+String A consists of ^, /, *, +, -, (, ) and lowercase English alphabets where lowercase English alphabets are operands and ^, /, *, +, - are operators.
+
+Find and return the postfix expression of A.
+
+NOTE:
+
+^ has the highest precedence.
+/ and * have equal precedence but greater than + and -.
++ and - have equal precedence and lowest precedence among given operators.
+
+
+Problem Constraints
+1 <= length of the string <= 500000
+
+
+
+Input Format
+The only argument given is string A.
+
+
+
+Output Format
+Return a string denoting the postfix conversion of A.
+
+
+
+Example Input
+Input 1:
+
+ A = "x^y/(a*z)+b"
+Input 2:
+
+ A = "a+b*(c^d-e)^(f+g*h)-i"
+
+
+Example Output
+Output 1:
+
+ "xy^az*/b+"
+Output 2:
+
+ "abcd^e-fgh*+^*+i-"
+
+
+Example Explanation
+Explanation 1:
+
+ Ouput dentotes the postfix expression of the given input.
+
+
+
+//Java
+
+
+public class Solution {
+    HashMap<Character, Integer> mp;
+    public String solve(String A) {
+        //Creating Precedence map
+        mp = new HashMap<>();
+        mp.put('+', 1);
+        mp.put('-', 1);
+        mp.put('/', 2);
+        mp.put('*', 2);
+        mp.put('^', 3);
+
+        Stack<Character> st = new Stack<>();
+        int n = A.length();
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < n; i++){
+            char c = A.charAt(i);
+            //If current character is operend then add it to string
+            if(!mp.containsKey(c) && c != '(' && c != ')'){
+                sb.append(c);
+            }else{
+                //If stack is empty or opening bracket push it to stack.
+                if(st.isEmpty() || c == '('){
+                    st.push(c);
+                //If closing bracket found then pop elements from stack till you find
+                //opening bracket and append operators to string.
+                }else if(c == ')'){
+                    while(!st.isEmpty() &&st.peek() != '('){
+                        sb.append(st.pop());
+                    }
+                    //Finally pop opening bracket
+                    st.pop();
+                }else{
+                    //If operator found then check its priority if greater or equal append it
+                    //to string and remove from stack finally push current element to stack
+                    while(!st.isEmpty() && st.peek() != '(' && mp.get(st.peek()) >= mp.get(c)){
+                        sb.append(st.pop());
+                    }
+                    st.push(c);
+                }
+            }
+        }
+        while(!st.isEmpty())
+            sb.append(st.pop());
+        return sb.toString();
+    }
+}
