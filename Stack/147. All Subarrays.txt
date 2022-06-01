@@ -1,0 +1,109 @@
+Problem Description
+Given an integer array A of size N. You have to generate it's all subarrays having a size greater than 1.
+
+Then for each subarray, find Bitwise XOR of its maximum and second maximum element.
+
+Find and return the maximum value of XOR among all subarrays.
+
+
+
+Problem Constraints
+2 <= N <= 105
+
+1 <= A[i] <= 107
+
+
+
+Input Format
+The only argument is an integer array A.
+
+
+
+Output Format
+Return an integer, i.e., the maximum value of XOR of maximum and 2nd maximum element among all subarrays.
+
+
+
+Example Input
+Input 1:
+
+ A = [2, 3, 1, 4]
+Input 2:
+
+ A = [1, 3]
+
+
+Example Output
+Output 1:
+
+ 7
+Outnput 2:
+
+ 2
+
+
+Example Explanation
+Explanation 1:
+
+ All subarrays of A having size greater than 1 are:
+ Subarray            XOR of maximum and 2nd maximum no.
+ 1. [2, 3]           1
+ 2. [2, 3, 1]        1
+ 3. [2, 3, 1, 4]     7
+ 4. [3, 1]           2
+ 5. [3, 1, 4]        7
+ 6. [1, 4]           5
+ So maximum value of Xor among all subarrays is 7.
+Explanation 2:
+
+ Only subarray is [1, 3] and XOR of maximum and 2nd maximum is 2.
+ 
+ 
+//Java
+
+
+public class Solution {
+    /*
+    The subarray can only be reflected on its maximum element and second maximum element, so apparently,
+    there must be a lot of meaningless subarrays which we needn’t check them at all.
+    Can we use a stack to maintain the maximum and 2nd maximum of all subarrays?
+
+    The subarray can only be reflected on its maximum element and second maximum element, so apparently,
+    there must be a lot of meaningless subarrays which we needn’t check them at all. But how can we skip them?
+    Maintain a monotone-decreasing-stack can help us.
+    While a new element came into the view, pop the top element in the stack, and check the corresponding 
+    interval, until the new element is greater than the top element in the stack. We can easily see it is 
+    correct since we won’t lost the answer as long as it exists.
+
+    TC = O(N) || SC = O(N)
+    */
+    public int solve(int[] A) {
+        //The idea is to maintain a stack which will have the 
+        //secondmax element at top everytime
+        int n = A.length;
+        Stack<Integer> st = new Stack<>();
+        st.push(0);
+        int ans = Integer.MIN_VALUE;
+        for(int i = 1; i < n; i++){
+            //Consider each element of array as max element 
+            int max = A[i];
+            while(!st.isEmpty()){
+                int secMax = A[st.peek()];
+                ans = Math.max(ans, max ^ secMax);
+                //Now check if current max is lesser than secondmax then it 
+                //Cannot be a max element so in this case we need our secmax to be present 
+                //in the stack so that we can check its XOR with other elements for which current 
+                //secondmax will be a probable secondmax so dont pop it from the stack//just break 
+                //the loop in this case
+                if(max < secMax)
+                    break;
+                //If current max is greater than secMax then current secmax cannot be secMax for
+                //next elements so pop it out
+                st.pop();
+            }
+            //Push the current element to the stack
+            st.push(i);
+        }
+        return ans;
+    }
+}
