@@ -1,0 +1,177 @@
+Problem Description
+Given an array of integers A.
+
+value of a array = max(array) - min(array).
+
+Calculate and return the sum of values of all possible subarrays of A modulo 109+7.
+
+
+
+Problem Constraints
+1 <= |A| <= 100000
+
+1 <= A[i] <= 1000000
+
+
+
+Input Format
+The first and only argument given is the integer array A.
+
+
+
+Output Format
+Return the sum of values of all possible subarrays of A modulo 109+7.
+
+
+
+Example Input
+Input 1:
+
+ A = [1]
+Input 2:
+
+ A = [4, 7, 3, 8]
+
+
+Example Output
+Output 1:
+
+ 0
+Output 2:
+
+ 26
+
+
+Example Explanation
+Explanation 1:
+
+Only 1 subarray exists. Its value is 0.
+Explanation 2:
+
+value ( [4] ) = 4 - 4 = 0
+value ( [7] ) = 7 - 7 = 0
+value ( [3] ) = 3 - 3 = 0
+value ( [8] ) = 8 - 8 = 0
+value ( [4, 7] ) = 7 - 4 = 3
+value ( [7, 3] ) = 7 - 3 = 4
+value ( [3, 8] ) = 8 - 3 = 5
+value ( [4, 7, 3] ) = 7 - 3 = 4
+value ( [7, 3, 8] ) = 8 - 3 = 5
+value ( [4, 7, 3, 8] ) = 8 - 3 = 5
+sum of values % 10^9+7 = 26
+
+
+//Java
+
+
+public class Solution {
+    /*
+    Note :  This question can become triky if duplicates are allowed in the input Array.
+            To handle this edge case we should provide the condition while calculating the contribution
+            Condition for min ele : A[psmaller] <= A[i] < A[nsmaller]
+            Condition for max ele : A[pgreater] >= A[i] > A[ngreater] 
+            We should use these conditions while precomputing arrays for finding next and prev smaller and
+            greater elements
+    
+    TC = O(N) || SC = O(N)
+    */
+    public int solve(int[] A) {
+        int[] prevSmaller = prevSmaller(A);
+        int[] nextSmaller = nextSmaller(A);
+        int[] prevGreater = prevGreater(A);
+        int[] nextGreater = nextGreater(A);
+
+        int n = A.length;
+        long ans = 0;
+        int mod = 1000000007;
+        for(int i = 0; i < n; i++){
+            //Find contribution in final answer where A[i] is minimum
+            //contribution = A[i] * ((i - prevSmaller) * (nextSmaller - i))
+            int psmaller = prevSmaller[i];
+            int nsmaller = nextSmaller[i];
+            long minContriInSubarrays = (1L * (i - psmaller) * (nsmaller - i)) % mod;
+            long minContribution = (A[i] * minContriInSubarrays) % mod;
+
+            //Find contribution in final answer where A[i] is maximum
+            //contribution = A[i] * ((i - prevGreater) * (nextGreater - i))
+            int pgreater = prevGreater[i];
+            int ngreater = nextGreater[i];
+            long maxContriInSubarrays = (1L * (i - pgreater) * (ngreater - i)) % mod;
+            long maxContribution = (A[i] * maxContriInSubarrays) % mod;
+
+            //Find total contribution in the final answer
+            ans = (ans % mod) + ((maxContribution - minContribution) % mod);
+            ans = ans % mod;
+        }
+        if(ans < 0){
+            ans = (ans + mod) % mod;
+        }
+        return (int)(ans%mod);
+    }
+    public int[] prevSmaller(int[] A) {
+        int n = A.length;
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0; i < n; i++){
+            while(!st.isEmpty() && A[i] <= A[st.peek()]){
+                st.pop();
+            }
+
+            ans[i] = st.size() > 0 ? st.peek() : -1;
+            st.push(i);
+        }
+        return ans;
+    }
+    public int[] nextSmaller(int[] A) {
+        int n = A.length;
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Stack<Integer> st = new Stack<>();
+        for(int i = n-1; i >= 0; i--){
+            //Without duplicates :while(!st.isEmpty() && A[i] <= A[st.peek()]){
+            //With duplicates : This will work for all cases with or without duplicates
+            while(!st.isEmpty() && A[i] < A[st.peek()]){
+                st.pop();
+            }
+
+            ans[i] = st.size() > 0 ? st.peek() : n;
+            st.push(i);
+        }
+        return ans;
+    }
+
+    public int[] prevGreater(int[] A) {
+        int n = A.length;
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0; i < n; i++){
+            while(!st.isEmpty() && A[i] >= A[st.peek()]){
+                st.pop();
+            }
+
+            ans[i] = st.size() > 0 ? st.peek() : -1;
+            st.push(i);
+        }
+        return ans;
+    }
+
+    public int[] nextGreater(int[] A) {
+        int n = A.length;
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Stack<Integer> st = new Stack<>();
+        for(int i = n-1; i >= 0; i--){
+            //Without duplicates : while(!st.isEmpty() && A[i] >= A[st.peek()]){
+            //With duplicates : This will work for all cases with or without duplicates
+            while(!st.isEmpty() && A[i] > A[st.peek()]){
+                st.pop();
+            }
+
+            ans[i] = st.size() > 0 ? st.peek() : n;
+            st.push(i);
+        }
+        return ans;
+    }
+}
