@@ -1,0 +1,147 @@
+Problem Description
+
+Implement a First In First Out (FIFO) queue using stacks only.
+
+The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+
+Implement the UserQueue class:
+
+void push(int X) : Pushes element X to the back of the queue.
+int pop() : Removes the element from the front of the queue and returns it.
+int peek() : Returns the element at the front of the queue.
+boolean empty() : Returns true if the queue is empty, false otherwise.
+NOTES:
+
+You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.
+Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
+
+
+Problem Constraints
+
+1 <= X <= 109
+
+At most 1000 calls will be made to push, pop, peek, and empty function.
+
+All the calls to pop and peek are valid. i.e. pop and peek are called only when the queue is non-empty.
+
+
+
+Example Input
+
+Input 1:
+
+ 1) UserStack()
+ 2) push(20)
+ 3) empty()
+ 4) peek()
+ 5) pop()
+ 6) empty()
+ 7) push(30)
+ 8) peek()
+ 9) push(40)
+ 10) peek()
+Input 2:
+
+ 1) UserStack()
+ 2) push(10)
+ 3) push(20)
+ 4) push(30)
+ 5) pop()
+ 6) pop()
+
+
+Example Output
+
+Output 1:
+
+ false
+ 20
+ 20
+ true
+ 30
+ 30 
+Output 2:
+
+ 10
+ 20
+
+
+Example Explanation
+
+Explanation 1:
+
+ Queue => 20
+ Queue => -
+ Queue => 30
+ Queue => 30, 40 
+Explanation 2:
+
+ Queue => 10
+ Queue => 10, 20
+ Queue => 10, 20, 30
+ Queue => 20, 30
+ Queue => 30
+
+
+//Java
+
+
+    /*
+    In order to implement queue using stacks, we need to maintain two stacks s1 and s2.
+
+    Algorithm:
+
+    1) For push:
+    The new element is always added to the top of stack s1 and it is kept as rear element of the queue.
+
+    2) For pop:
+    We have to remove element in front of the queue. This is the first inserted element in the stack s1 
+    and it is positioned at the bottom of the stack because of stack’s LIFO (last in - first out) policy. 
+    To remove the bottom element from s1, we have to pop all elements from s1 and to push them on to an 
+    additional stack s2, which helps us to store the elements of s1 in reversed order. This way the bottom 
+    element of s1 will be positioned on top of s2 and we can simply pop it from stack s2. Once s2 is empty, 
+    the algorithm transfer data from s1 to s2 again.
+
+    3) For empty:
+    Both stacks s1 and s2 contain all stack elements, so the algorithm checks s1 and s2 size to return if 
+    the queue is empty.
+
+    4) For peek:
+    The rear element is the bottom element of s1. We will do the same operations done in pop except for 
+    the operation of removing the element.
+    */
+    /** Initialize your data structure here. */
+    static Stack<Integer> st1;
+    static Stack<Integer> st2;
+    UserQueue() {
+        st1 = new Stack<>();
+        st2 = new Stack<>();
+    }
+    
+    /** Push element X to the back of queue. */
+    static void push(int x) {
+        st1.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    static int pop() {
+        if(st2.size() == 0){
+            while(!st1.isEmpty())
+                st2.push(st1.pop());
+        }
+        return st2.pop();
+    }
+    
+    /** Get the front element of the queue. */
+    static int peek() {
+        if(st2.size() == 0){
+            while(!st1.isEmpty())
+                st2.push(st1.pop());
+        }
+        return st2.peek();
+    }
+    
+    /** Returns whether the queue is empty. */
+    static boolean empty() {
+        return st1.isEmpty() && st2.isEmpty();
+    }

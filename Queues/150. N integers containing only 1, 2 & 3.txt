@@ -1,0 +1,85 @@
+Problem Description
+Given an integer, A. Find and Return first positive A integers in ascending order containing only digits 1, 2, and 3.
+
+NOTE: All the A integers will fit in 32-bit integers.
+
+
+
+Problem Constraints
+1 <= A <= 29500
+
+
+
+Input Format
+The only argument given is integer A.
+
+
+
+Output Format
+Return an integer array denoting the first positive A integers in ascending order containing only digits 1, 2 and 3.
+
+
+
+Example Input
+Input 1:
+
+ A = 3
+Input 2:
+
+ A = 7
+
+
+Example Output
+Output 1:
+
+ [1, 2, 3]
+Output 2:
+
+ [1, 2, 3, 11, 12, 13, 21]
+
+
+Example Explanation
+Explanation 1:
+
+ Output denotes the first 3 integers that contains only digits 1, 2 and 3.
+Explanation 2:
+
+ Output denotes the first 3 integers that contains only digits 1, 2 and 3.
+
+
+//Java
+
+
+public class Solution {
+    public int[] solve(int A) {
+        /*
+        We know the initial three values will be 1, 2, and 3.
+
+        Now, the upcoming values will be by appending 1, 2, and 3 in each given value.
+
+        We will use a queue or ArrayList to store the elements in ascending order.
+
+        TC = O(A) || SC = O(A)
+        */
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        int cnt = 3;
+        int p1 = 0;
+        while(cnt <= A-1){
+            int ele = list.get(p1);
+            list.add(ele*10+1);
+            list.add(ele*10+2);
+            list.add(ele*10+3);
+            p1++;
+            cnt += 3;
+        }
+        int n = list.size();
+        int[] arr = new int[A];
+        for(int i = 0; i < A; i++){
+            arr[i] = list.get(i);
+        }
+        return arr;
+    }
+}
