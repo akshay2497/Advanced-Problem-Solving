@@ -61,6 +61,7 @@ Directly task 1 is completed.
 
 public class Solution {
     public int solve(int[] A, int[] B) {
+        //TC & SC = O(N)
         Queue<Integer> q = new LinkedList<>();
         for(int ele : A)
             q.offer(ele);
